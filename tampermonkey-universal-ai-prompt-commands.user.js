@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Tampermonkey Universal AI Prompt Commands EN
 // @namespace    local.tampermonkey.universal.ai.prompt.commands.en
-// @version      1.0.0
-// @description  Universal Tampermonkey userscript: replaces short commands R1-R10 and D1-D10 with prepared AI prompts on different websites
+// @version      1.1.0
+// @description  English version: replaces short commands E1-E10 with prepared English AI prompts for fast input in AI chats
 // @author       1777maxim7771
 // @match        *://*/*
 // @grant        none
@@ -16,135 +16,69 @@
         Tampermonkey Universal AI Prompt Commands EN
 
         Purpose:
-        This script watches active input fields on websites and replaces short commands
-        with prepared prompts for working with AI chats.
-
-        Commands:
-        R1-R10 — Russian command set / prompts
-        D1-D10 — German command set / prompts
+        This script helps you work faster with AI chats.
+        The user enters a short command E1-E10, and the script replaces it
+        with a full prepared prompt in English.
 
         Example:
-        Type R1 into an input field — the script replaces R1 with a full prompt for translation into Russian.
+        E1 -> full prompt for an accurate translation into Russian.
 
         Important:
-        The script only works when the field contains exactly a command, for example R1 or D3.
-        Normal text is not changed.
+        The script replaces only exact commands. Normal text is not changed.
     */
 
     const COMMANDS = {
-        // =========================
-        // RUSSIAN COMMANDS R1-R10
-        // =========================
+        'E1': `Translate the provided text fully and accurately into Russian.
+Preserve the meaning, order of information, names, dates, amounts, document numbers, organization names and important wording.
+If the text contains official or legal expressions, translate them clearly without changing the meaning.
+Do not add your own conclusions, do not shorten the text and do not change the content.`,
 
-        'R1': `Сделай полный и точный перевод предоставленного текста на русский язык.
-Сохрани смысл, порядок информации, имена, даты, суммы, номера документов, названия организаций и важные формулировки.
-Если в тексте есть официальные или юридические выражения, переведи их понятно, но без искажения смысла.
-Не добавляй свои выводы, не сокращай текст и не меняй содержание.`,
+        'E2': `Summarize the provided text in Russian according to its meaning and context.
+Explain what the text is about, who is writing or reporting to whom, what the subject is and what the main content is.
+Separately mention requirements, requests, decisions, dates, deadlines, amounts and important details.
+Write in simple and clear language, without unnecessary reasoning.`,
 
-        'R2': `Подытожь предоставленный текст на русском языке по смыслу и контексту.
-Сделай понятную суммаризацию: о чем текст, кто кому пишет или сообщает, по какому вопросу, что является главным содержанием, какие требования, просьбы, решения, даты, сроки, суммы или важные детали указаны.
-Пиши простым понятным языком, без лишних рассуждений.
-Если это письмо, объясни суть письма так, чтобы сразу было понятно, к чему оно относится и что с ним нужно делать.`,
+        'E3': `Create a short thematic summary of the letter in Russian, strictly in one line.
+In this one line, mention: who the letter is from, what the issue is, what is reported or required, and which important dates, deadlines, amounts, documents or actions are mentioned.
+The result must be short but informative.`,
 
-        'R3': `Сделай краткое тематическое резюме письма на русском языке строго в одну строку.
-В этой одной строке укажи: от кого письмо, по какому вопросу, что сообщается или требуется, какие важные даты, сроки, суммы, документы или действия упоминаются.
-Результат должен быть коротким, но содержательным, чтобы по одной строке было понятно главное содержание письма.`,
+        'E4': `Translate the provided text into simple and understandable German at A2-B1 level.
+Make the text polite, official and grammatically correct.
+Preserve the original meaning, dates, names, amounts, addresses, organization names and important details.
+Do not use overly complicated German wording.`,
 
-        'R4': `Переведи предоставленный текст на немецкий язык простым и понятным уровнем A2-B1.
-Сделай текст вежливым, официальным и грамматически правильным.
-Сохрани исходный смысл, даты, имена, суммы, адреса, названия организаций и важные детали.
-Не используй слишком сложные немецкие формулировки.
-Текст должен звучать естественно для письма в ведомство, работодателю или организацию.`,
+        'E5': `Correct the provided Russian text.
+Make it grammatically correct, clear and logical, while preserving my original meaning.
+Remove mistakes, repetitions, weak wording and overly colloquial parts.
+If the text is intended for a letter, make it more polite and official.
+Do not add facts that are not present in the original text.`,
 
-        'R5': `Исправь предоставленный текст на русском языке.
-Сделай его грамотным, понятным и логичным, но сохрани мой исходный смысл.
-Убери ошибки, повторения, неудачные формулировки и слишком разговорные места.
-Если текст предназначен для письма, сделай его более вежливым и официальным.
-Не добавляй фактов, которых нет в исходном тексте.`,
+        'E6': `Write a short, polite and official reply to this letter in German.
+The reply should be simple, at A2-B1 level.
+Take the content of the letter into account and answer directly, without unnecessary phrases.
+If it is necessary to confirm receipt, clarify documents, request an explanation or provide information, formulate it correctly.
+Add at the end: Mit freundlichen Grüßen`,
 
-        'R6': `Напиши короткий, вежливый и официальный ответ на это письмо на немецком языке.
-Ответ должен быть простым уровнем A2-B1.
-Учитывай содержание письма, отвечай по существу, без лишних фраз.
-Если нужно подтвердить получение, уточнить документы, попросить разъяснение или сообщить информацию, сформулируй это корректно.
-В конце добавь: Mit freundlichen Grüßen`,
+        'E7': `Explain in simple Russian what this text means.
+Analyze the meaning according to the context: who is writing, about what issue, what is requested, what needs to be done, and which deadlines, dates, amounts, documents or conditions are important.
+If the text is official, explain it in normal everyday language.
+Separately state whether the text contains a demand, warning, request, decision or only information.`,
 
-        'R7': `Объясни простыми словами на русском языке, что означает этот текст.
-Разбери смысл по контексту: кто пишет, по какому вопросу, что хотят, что нужно сделать, какие сроки, даты, суммы, документы или условия важны.
-Если текст официальный, объясни его обычным человеческим языком.
-Отдельно укажи, есть ли в тексте требование, предупреждение, просьба, решение или просто информация.`,
+        'E8': `Extract all important facts from the provided text and structure them in Russian.
+Separately list: people names, organizations, addresses, dates, deadlines, amounts, document numbers, requirements, decisions, obligations, mentioned documents and further necessary steps.
+Do not invent data that is not in the text.
+If information is missing, write: not specified.`,
 
-        'R8': `Извлеки из предоставленного текста все важные факты и структурируй их на русском языке.
-Отдельно укажи: имена людей, организации, адреса, даты, сроки, суммы, номера документов, требования, решения, обязательства, упомянутые документы и дальнейшие действия.
-Не придумывай данные, которых нет в тексте.
-Если какой-то информации нет, так и напиши: не указано.`,
+        'E9': `Create a clear list in Russian of the actions that must be completed based on this text.
+Determine what needs to be done, which documents must be prepared, who should be answered, where to apply, which deadlines must be observed and what needs attention.
+Divide the actions by priority: urgent, important, can be done later.
+If it is not clear from the text what exactly must be done, list the questions that need clarification.`,
 
-        'R9': `Составь на русском языке понятный список действий, которые нужно выполнить на основании этого текста.
-Определи, что требуется сделать, какие документы подготовить, кому ответить, куда обратиться, какие сроки соблюдать и на что обратить внимание.
-Раздели действия по приоритету: срочно, важно, можно позже.
-Если из текста неясно, что именно нужно делать, укажи, какие вопросы нужно уточнить.`,
-
-        'R10': `Сделай на основе предоставленного текста вежливое официальное письмо на немецком языке.
-Письмо должно быть простым, понятным и корректным, уровень A2-B1.
-Сохрани все важные факты: имена, даты, суммы, адреса, названия организаций, номера документов и обстоятельства.
-Структура письма: обращение, краткое объяснение ситуации, основная просьба или сообщение, при необходимости просьба о подтверждении или разъяснении, завершение.
-В конце добавь: Mit freundlichen Grüßen`,
-
-        // =========================
-        // GERMAN COMMANDS D1-D10
-        // =========================
-
-        'D1': `Übersetze den bereitgestellten Text vollständig und genau ins Russische.
-Erhalte den Sinn, die Reihenfolge der Informationen, Namen, Daten, Beträge, Dokumentennummern, Organisationsnamen und wichtige Formulierungen.
-Wenn der Text offizielle oder juristische Ausdrücke enthält, übersetze sie verständlich, aber ohne den Sinn zu verändern.
-Füge keine eigenen Schlussfolgerungen hinzu, kürze den Text nicht und ändere den Inhalt nicht.`,
-
-        'D2': `Fasse den bereitgestellten Text auf Russisch nach Sinn und Kontext zusammen.
-Erstelle eine verständliche Zusammenfassung: worum es geht, wer an wen schreibt oder etwas mitteilt, zu welchem Thema, was der Hauptinhalt ist, welche Forderungen, Bitten, Entscheidungen, Daten, Fristen, Beträge oder wichtigen Details genannt werden.
-Schreibe einfach und verständlich, ohne unnötige Erklärungen.
-Wenn es sich um einen Brief handelt, erkläre den Inhalt so, dass sofort klar ist, worum es geht und was damit zu tun ist.`,
-
-        'D3': `Erstelle eine kurze thematische Zusammenfassung des Briefes auf Russisch, streng in einer einzigen Zeile.
-In dieser einen Zeile nenne: von wem der Brief ist, zu welchem Thema, was mitgeteilt oder verlangt wird, welche wichtigen Daten, Fristen, Beträge, Dokumente oder Handlungen erwähnt werden.
-Das Ergebnis soll kurz, aber inhaltlich aussagekräftig sein, damit man aus einer Zeile den Hauptinhalt des Briefes versteht.`,
-
-        'D4': `Übersetze den bereitgestellten Text ins Deutsche auf einfachem und verständlichem Niveau A2-B1.
-Formuliere den Text höflich, offiziell und grammatikalisch korrekt.
-Erhalte den ursprünglichen Sinn, Daten, Namen, Beträge, Adressen, Organisationsnamen und wichtige Details.
-Verwende keine zu komplizierten deutschen Formulierungen.
-Der Text soll natürlich für einen Brief an eine Behörde, einen Arbeitgeber oder eine Organisation klingen.`,
-
-        'D5': `Korrigiere den bereitgestellten russischen Text.
-Mache ihn grammatikalisch richtig, verständlich und logisch, aber erhalte meinen ursprünglichen Sinn.
-Entferne Fehler, Wiederholungen, unglückliche Formulierungen und zu umgangssprachliche Stellen.
-Wenn der Text für einen Brief bestimmt ist, mache ihn höflicher und offizieller.
-Füge keine Fakten hinzu, die im Ausgangstext nicht vorhanden sind.`,
-
-        'D6': `Schreibe eine kurze, höfliche und offizielle Antwort auf diesen Brief auf Deutsch.
-Die Antwort soll einfach sein, Niveau A2-B1.
-Berücksichtige den Inhalt des Briefes und antworte sachlich, ohne unnötige Formulierungen.
-Wenn der Empfang bestätigt, Unterlagen geklärt, eine Erklärung erbeten oder Informationen mitgeteilt werden müssen, formuliere das korrekt.
-Am Ende füge hinzu: Mit freundlichen Grüßen`,
-
-        'D7': `Erkläre auf Russisch in einfachen Worten, was dieser Text bedeutet.
-Analysiere den Sinn nach Kontext: wer schreibt, zu welchem Thema, was verlangt wird, was getan werden muss, welche Fristen, Daten, Beträge, Dokumente oder Bedingungen wichtig sind.
-Wenn der Text offiziell ist, erkläre ihn in normaler Alltagssprache.
-Nenne gesondert, ob es im Text eine Forderung, Warnung, Bitte, Entscheidung oder nur eine Information gibt.`,
-
-        'D8': `Extrahiere aus dem bereitgestellten Text alle wichtigen Fakten und strukturiere sie auf Russisch.
-Nenne getrennt: Personennamen, Organisationen, Adressen, Daten, Fristen, Beträge, Dokumentennummern, Anforderungen, Entscheidungen, Verpflichtungen, erwähnte Dokumente und weitere notwendige Schritte.
-Erfinde keine Daten, die im Text nicht stehen.
-Wenn eine Information fehlt, schreibe: nicht angegeben.`,
-
-        'D9': `Erstelle auf Russisch eine verständliche Liste der Handlungen, die auf Grundlage dieses Textes ausgeführt werden müssen.
-Bestimme, was getan werden muss, welche Dokumente vorbereitet werden sollen, wem geantwortet werden muss, wohin man sich wenden soll, welche Fristen einzuhalten sind und worauf man achten muss.
-Teile die Handlungen nach Priorität ein: dringend, wichtig, später möglich.
-Wenn aus dem Text nicht klar ist, was genau zu tun ist, nenne die Fragen, die geklärt werden müssen.`,
-
-        'D10': `Erstelle auf Grundlage des bereitgestellten Textes einen höflichen offiziellen Brief auf Deutsch.
-Der Brief soll einfach, verständlich und korrekt sein, Niveau A2-B1.
-Erhalte alle wichtigen Fakten: Namen, Daten, Beträge, Adressen, Organisationsnamen, Dokumentennummern und Umstände.
-Struktur des Briefes: Anrede, kurze Erklärung der Situation, Hauptbitte oder Mitteilung, falls nötig Bitte um Bestätigung oder Erklärung, Abschluss.
-Am Ende füge hinzu: Mit freundlichen Grüßen`
+        'E10': `Create a polite official letter in German based on the provided text.
+The letter should be simple, clear and correct, at A2-B1 level.
+Preserve all important facts: names, dates, amounts, addresses, organization names, document numbers and circumstances.
+Letter structure: greeting, short explanation of the situation, main request or message, if necessary request for confirmation or clarification, closing.
+Add at the end: Mit freundlichen Grüßen`
     };
 
     const EDITABLE_SELECTORS = [
@@ -158,7 +92,6 @@ Am Ende füge hinzu: Mit freundlichen Grüßen`
 
     function isEditableElement(element) {
         if (!element || !element.matches) return false;
-
         if (element.disabled || element.readOnly) return false;
 
         const tagName = element.tagName ? element.tagName.toLowerCase() : '';
@@ -174,10 +107,7 @@ Am Ende füge hinzu: Mit freundlichen Grüßen`
 
     function findEditableElement(target) {
         if (!target) return null;
-
-        if (isEditableElement(target)) {
-            return target;
-        }
+        if (isEditableElement(target)) return target;
 
         if (target.closest) {
             const element = target.closest(EDITABLE_SELECTORS.join(','));
@@ -189,26 +119,17 @@ Am Ende füge hinzu: Mit freundlichen Grüßen`
 
     function getText(element) {
         if (!element) return '';
-
         const tagName = element.tagName ? element.tagName.toLowerCase() : '';
-
-        if (tagName === 'textarea' || tagName === 'input') {
-            return element.value || '';
-        }
-
+        if (tagName === 'textarea' || tagName === 'input') return element.value || '';
         return element.innerText || element.textContent || '';
     }
 
     function normalizeCommand(text) {
-        return text
-            .trim()
-            .replace(/\s+/g, '')
-            .toUpperCase();
+        return text.trim().replace(/\s+/g, '').toUpperCase();
     }
 
     function setCursorToEnd(element) {
         element.focus();
-
         const tagName = element.tagName ? element.tagName.toLowerCase() : '';
 
         if (tagName === 'textarea' || tagName === 'input') {
@@ -219,10 +140,8 @@ Am Ende füge hinzu: Mit freundlichen Grüßen`
 
         const range = document.createRange();
         const selection = window.getSelection();
-
         range.selectNodeContents(element);
         range.collapse(false);
-
         selection.removeAllRanges();
         selection.addRange(range);
     }
@@ -236,21 +155,15 @@ Am Ende füge hinzu: Mit freundlichen Grüßen`
                 data: text
             }));
         } catch (error) {
-            element.dispatchEvent(new Event('input', {
-                bubbles: true
-            }));
+            element.dispatchEvent(new Event('input', { bubbles: true }));
         }
 
-        element.dispatchEvent(new Event('change', {
-            bubbles: true
-        }));
+        element.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     function replaceText(element, newText) {
         if (!element) return;
-
         const tagName = element.tagName ? element.tagName.toLowerCase() : '';
-
         element.focus();
 
         if (tagName === 'textarea' || tagName === 'input') {
@@ -263,11 +176,9 @@ Am Ende füge hinzu: Mit freundlichen Grüßen`
         try {
             const range = document.createRange();
             const selection = window.getSelection();
-
             range.selectNodeContents(element);
             selection.removeAllRanges();
             selection.addRange(range);
-
             document.execCommand('insertText', false, newText);
         } catch (error) {
             element.textContent = newText;
@@ -279,16 +190,11 @@ Am Ende füge hinzu: Mit freundlichen Grüßen`
 
     function showNotification(message) {
         const oldBox = document.getElementById('tampermonkey-universal-ai-prompt-commands-notification');
-
-        if (oldBox) {
-            oldBox.remove();
-        }
+        if (oldBox) oldBox.remove();
 
         const box = document.createElement('div');
-
         box.id = 'tampermonkey-universal-ai-prompt-commands-notification';
         box.textContent = message;
-
         box.style.position = 'fixed';
         box.style.right = '20px';
         box.style.bottom = '20px';
@@ -302,46 +208,24 @@ Am Ende füge hinzu: Mit freundlichen Grüßen`
         box.style.boxShadow = '0 4px 12px rgba(0,0,0,0.35)';
         box.style.maxWidth = '420px';
         box.style.lineHeight = '1.4';
-
         document.body.appendChild(box);
-
-        setTimeout(() => {
-            box.remove();
-        }, 2200);
+        setTimeout(() => box.remove(), 2200);
     }
 
     function checkAndReplace(target) {
         const editable = findEditableElement(target);
-
         if (!editable) return;
 
         const currentText = getText(editable);
         const command = normalizeCommand(currentText);
 
-        if (!Object.prototype.hasOwnProperty.call(COMMANDS, command)) {
-            return;
-        }
+        if (!Object.prototype.hasOwnProperty.call(COMMANDS, command)) return;
 
         replaceText(editable, COMMANDS[command]);
-        showNotification(`Command ${command} was replaced with a prepared AI prompt`);
+        showNotification(`Command ${command} was replaced with a prepared prompt`);
     }
 
-    document.addEventListener('input', function (event) {
-        setTimeout(() => {
-            checkAndReplace(event.target);
-        }, 20);
-    }, true);
-
-    document.addEventListener('keyup', function (event) {
-        setTimeout(() => {
-            checkAndReplace(event.target);
-        }, 20);
-    }, true);
-
-    document.addEventListener('paste', function (event) {
-        setTimeout(() => {
-            checkAndReplace(event.target);
-        }, 50);
-    }, true);
-
+    document.addEventListener('input', event => setTimeout(() => checkAndReplace(event.target), 20), true);
+    document.addEventListener('keyup', event => setTimeout(() => checkAndReplace(event.target), 20), true);
+    document.addEventListener('paste', event => setTimeout(() => checkAndReplace(event.target), 50), true);
 })();
