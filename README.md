@@ -1,109 +1,103 @@
 # Tampermonkey Universal AI Prompt Commands EN
 
-**Tampermonkey Universal AI Prompt Commands EN** is the English version of a userscript for the **Tampermonkey** browser extension. It helps you work faster with AI chats such as ChatGPT, Gemini, Claude, Copilot and other websites with text input fields.
+**Tampermonkey Universal AI Prompt Commands EN** is the English localization of a Tampermonkey userscript for faster work with artificial intelligence chats.
 
-The main purpose of the script is to replace short commands `E1–E10` with prepared long AI prompts in English. This saves time because you do not need to type the same long prompt manually again and again.
-
----
-
-## What is this script for?
-
-The script is intended for fast prompt input in AI chats.
-
-It helps with repeated tasks such as:
-
-- translating text into Russian;
-- translating text into simple German at A2-B1 level;
-- creating a short one-line letter summary;
-- summarizing letters, documents or messages;
-- explaining official texts in simple words;
-- extracting dates, amounts, names, organizations, deadlines and requirements;
-- creating a list of necessary actions;
-- preparing official replies or letters.
+The script replaces universal short triggers `Q1–Q10` with prepared AI prompts. These triggers are not tied to any language: the user can replace `Q1`, `Q2`, `Q3` and the other triggers with any custom words, commands or phrases.
 
 ---
 
-## How does the script work?
+## Purpose
 
-The user enters an exact command in the input field of an AI chat.
+The script is designed for fast prompt input in ChatGPT, Gemini, Claude, Copilot and other AI chats. Instead of typing the same long request every time, you type a short trigger such as `Q1`, and the script inserts the full prompt automatically.
+
+---
+
+## How it works
+
+The script watches the active input field on a website. If the whole content of the field exactly matches one of the triggers `Q1–Q10`, it is replaced with the prepared prompt.
 
 Example:
 
 ```text
-E1
+Q1
 ```
 
-The script automatically replaces this command with a full English prompt for an accurate translation into Russian.
-
-More examples:
+is replaced with a prompt for accurate translation into English.
 
 ```text
-E3
-```
-
-is replaced with a prompt for a short thematic one-line letter summary.
-
-```text
-E8
+Q8
 ```
 
 is replaced with a prompt for extracting important facts from a text.
 
-```text
-E9
+Normal text is not changed. For example, `Q1 some text` will not be replaced because it is not an exact trigger match.
+
+---
+
+## Custom triggers
+
+You can change the triggers directly in the script code inside the `COMMANDS` object.
+
+For example, you can replace:
+
+```javascript
+'Q1': `...`
 ```
 
-is replaced with a prompt for creating a list of actions.
+with:
+
+```javascript
+'TRANSLATE': `...`
+```
+
+or with any other word. Therefore, `Q1–Q10` are only the default universal triggers.
 
 ---
 
-## Commands in the English version
+## Where it can be used
 
-- `E1` — accurate translation of a text into Russian.
-- `E2` — summary of a text in Russian.
-- `E3` — short thematic letter summary in one line.
-- `E4` — translation of a text into simple German A2-B1.
-- `E5` — correction of Russian text while preserving the meaning.
-- `E6` — short official reply in German.
-- `E7` — simple explanation of a text in Russian.
-- `E8` — extraction of important facts from a text.
-- `E9` — list of necessary actions based on a text.
-- `E10` — official German letter based on the original text.
+The script is mainly intended for AI chats:
 
-In this English version, the comments, description, notification and prompts are written in English.
+- ChatGPT;
+- Google Gemini;
+- Claude;
+- Microsoft Copilot;
+- other websites with a text input field.
 
----
+The script contains:
 
-## What must be installed first?
+```javascript
+// @match        *://*/*
+```
 
-Before installing this script, the **Tampermonkey** browser extension must be installed.
-
-Tampermonkey is a browser extension that allows installing and running userscripts in `.user.js` format.
+This means Tampermonkey may run the script on different websites. Replacement happens only when the input exactly matches a trigger.
 
 ---
 
-## Quick installation
+## Requirement before installation
+
+Before installing the userscript, the **Tampermonkey** browser extension must be installed.
+
+The script is not installed into GitHub and not into a specific website. It is installed into the **Tampermonkey** extension. GitHub is only used to store the `.user.js` file.
+
+---
+
+## Quick installation via Raw link
 
 1. Install **Tampermonkey** in your browser.
-2. Open the direct Raw link to the script file:
+2. Open the Raw link:
 
 ```text
 https://raw.githubusercontent.com/1777maxim7771/en_tampermonkey-universal-ai-prompt-commands/main/tampermonkey-universal-ai-prompt-commands.user.js
 ```
 
-3. Tampermonkey should automatically open the installation window.
+3. Tampermonkey should open the installation window.
 4. Click **Install**.
-5. Open an AI chat and enter:
-
-```text
-E1
-```
-
-If the command is replaced with a long prompt, the script is installed correctly.
+5. Open an AI chat and type `Q1`.
 
 ---
 
-## Installation via GitHub
+## Installation through GitHub
 
 1. Open this repository.
 2. Open the file:
@@ -113,24 +107,20 @@ tampermonkey-universal-ai-prompt-commands.user.js
 ```
 
 3. Click **Raw**.
-4. Tampermonkey should recognize the `.user.js` file and offer installation.
-5. Click **Install**.
+4. Confirm installation in Tampermonkey.
 
 ---
 
-## If Raw does not work
+## Import by URL in Tampermonkey
 
-Open Tampermonkey manually:
+If the installation window does not appear:
 
-```text
-Tampermonkey → Dashboard → Utilities → Import from URL
-```
-
-Paste the Raw link:
-
-```text
-https://raw.githubusercontent.com/1777maxim7771/en_tampermonkey-universal-ai-prompt-commands/main/tampermonkey-universal-ai-prompt-commands.user.js
-```
+1. Open Tampermonkey.
+2. Go to **Dashboard**.
+3. Open **Utilities**.
+4. Find **Import from URL**.
+5. Paste the Raw link from this README.
+6. Confirm the installation.
 
 ---
 
@@ -139,22 +129,70 @@ https://raw.githubusercontent.com/1777maxim7771/en_tampermonkey-universal-ai-pro
 1. Open Tampermonkey.
 2. Click **Create a new script**.
 3. Delete the default template.
-4. Copy the full code from `tampermonkey-universal-ai-prompt-commands.user.js`.
-5. Paste the code into Tampermonkey.
+4. Copy the code from `tampermonkey-universal-ai-prompt-commands.user.js`.
+5. Paste it into the Tampermonkey editor.
 6. Save with **Ctrl + S**.
 
 ---
 
-## Important note
+## Why Tampermonkey recognizes the script
 
-The script is not installed into GitHub and not into a specific website. It is installed into the **Tampermonkey** browser extension.
-
-GitHub is only used as a storage location for the script file.
-
-The script contains:
+Tampermonkey recognizes the script by its userscript header:
 
 ```javascript
+// ==UserScript==
+// @name         Tampermonkey Universal AI Prompt Commands EN
 // @match        *://*/*
+// ==/UserScript==
 ```
 
-This means the script can run on different websites. However, it only replaces exact commands `E1–E10`. Normal text is not changed.
+and by the file extension:
+
+```text
+.user.js
+```
+
+---
+
+## Default commands
+
+- `Q1` — translate text into English.
+- `Q2` — summarize text.
+- `Q3` — create a one-line letter summary.
+- `Q4` — translate into simple German A2-B1.
+- `Q5` — correct English text.
+- `Q6` — write a short official reply.
+- `Q7` — explain text in simple words.
+- `Q8` — extract important facts.
+- `Q9` — create a list of required actions.
+- `Q10` — create an official letter in German.
+
+---
+
+## How to test after installation
+
+Open any AI chat and type:
+
+```text
+Q1
+```
+
+If the script is installed correctly, `Q1` will be replaced with the full prompt.
+
+---
+
+## Troubleshooting
+
+If the trigger is not replaced, check that:
+
+- the script is enabled in Tampermonkey;
+- the page was refreshed after installation;
+- the trigger was typed exactly, for example `Q1`, without extra text;
+- Tampermonkey is allowed to run on the website;
+- the cursor is inside an editable input field.
+
+---
+
+## Project purpose
+
+This project is made to speed up repetitive work with AI chats. It allows users to insert prepared prompts quickly for translation, summarization, letter analysis, official replies and document processing.
