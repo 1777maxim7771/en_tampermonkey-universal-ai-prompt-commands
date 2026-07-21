@@ -2,7 +2,7 @@
 // @name         Tampermonkey Universal AI Prompt Commands EN
 // @namespace    local.tampermonkey.universal.ai.prompt.commands.en
 // @version      1.1.0
-// @description  English version: replaces short commands E1-E10 with prepared English AI prompts for fast input in AI chats
+// @description  English version: replaces universal Q1-Q10 triggers with ready-made AI prompts for fast input in AI chats
 // @author       1777maxim7771
 // @match        *://*/*
 // @grant        none
@@ -16,128 +16,101 @@
         Tampermonkey Universal AI Prompt Commands EN
 
         Purpose:
-        This script helps you work faster with AI chats.
-        The user enters a short command E1-E10, and the script replaces it
-        with a full prepared prompt in English.
-
-        Example:
-        E1 -> full prompt for an accurate translation into Russian.
+        This script helps you work faster in AI chats such as ChatGPT, Gemini, Claude, Copilot and other websites with text input fields.
+        It replaces the universal short triggers Q1-Q10 with prepared long AI prompts.
 
         Important:
-        The script replaces only exact commands. Normal text is not changed.
+        The triggers Q1-Q10 are not tied to any language. You can replace them with your own commands, words or phrases.
+        Replacement happens only when the whole input field exactly matches a trigger.
     */
 
     const COMMANDS = {
-        'E1': `Translate the provided text fully and accurately into Russian.
+        'Q1': `Translate the provided text fully and accurately into English.
 Preserve the meaning, order of information, names, dates, amounts, document numbers, organization names and important wording.
 If the text contains official or legal expressions, translate them clearly without changing the meaning.
 Do not add your own conclusions, do not shorten the text and do not change the content.`,
 
-        'E2': `Summarize the provided text in Russian according to its meaning and context.
-Explain what the text is about, who is writing or reporting to whom, what the subject is and what the main content is.
-Separately mention requirements, requests, decisions, dates, deadlines, amounts and important details.
-Write in simple and clear language, without unnecessary reasoning.`,
+        'Q2': `Summarize the provided text in English according to its meaning and context.
+Explain what the text is about, who is writing or informing whom, what the topic is, what the main content is, and which requirements, requests, decisions, dates, deadlines, amounts or important details are mentioned.
+Write clearly and simply without unnecessary reasoning.`,
 
-        'E3': `Create a short thematic summary of the letter in Russian, strictly in one line.
-In this one line, mention: who the letter is from, what the issue is, what is reported or required, and which important dates, deadlines, amounts, documents or actions are mentioned.
-The result must be short but informative.`,
+        'Q3': `Create a short thematic summary of the letter in English in exactly one line.
+In that one line, mention who the letter is from, what the topic is, what is being communicated or requested, and which important dates, deadlines, amounts, documents or actions are mentioned.`,
 
-        'E4': `Translate the provided text into simple and understandable German at A2-B1 level.
+        'Q4': `Translate the provided text into simple and clear German at A2-B1 level.
 Make the text polite, official and grammatically correct.
 Preserve the original meaning, dates, names, amounts, addresses, organization names and important details.
 Do not use overly complicated German wording.`,
 
-        'E5': `Correct the provided Russian text.
-Make it grammatically correct, clear and logical, while preserving my original meaning.
-Remove mistakes, repetitions, weak wording and overly colloquial parts.
+        'Q5': `Correct the provided English text.
+Make it grammatically correct, clear and logical while preserving the original meaning.
+Remove mistakes, repetitions, awkward wording and overly informal parts.
 If the text is intended for a letter, make it more polite and official.
 Do not add facts that are not present in the original text.`,
 
-        'E6': `Write a short, polite and official reply to this letter in German.
-The reply should be simple, at A2-B1 level.
-Take the content of the letter into account and answer directly, without unnecessary phrases.
-If it is necessary to confirm receipt, clarify documents, request an explanation or provide information, formulate it correctly.
-Add at the end: Mit freundlichen Grüßen`,
+        'Q6': `Write a short, polite and official reply to this letter in English.
+The answer should be clear and to the point, without unnecessary phrases.
+If it is necessary to confirm receipt, clarify documents, ask for an explanation or provide information, formulate it correctly.
+Add a polite closing at the end.`,
 
-        'E7': `Explain in simple Russian what this text means.
-Analyze the meaning according to the context: who is writing, about what issue, what is requested, what needs to be done, and which deadlines, dates, amounts, documents or conditions are important.
-If the text is official, explain it in normal everyday language.
-Separately state whether the text contains a demand, warning, request, decision or only information.`,
+        'Q7': `Explain in simple English what this text means.
+Analyze the meaning in context: who is writing, what the issue is, what is requested, what needs to be done, and which deadlines, dates, amounts, documents or conditions are important.
+State separately whether the text contains a requirement, warning, request, decision or only information.`,
 
-        'E8': `Extract all important facts from the provided text and structure them in Russian.
-Separately list: people names, organizations, addresses, dates, deadlines, amounts, document numbers, requirements, decisions, obligations, mentioned documents and further necessary steps.
-Do not invent data that is not in the text.
-If information is missing, write: not specified.`,
+        'Q8': `Extract all important facts from the provided text and structure them in English.
+List separately: people’s names, organizations, addresses, dates, deadlines, amounts, document numbers, requirements, decisions, obligations, mentioned documents and next steps.
+Do not invent information that is not in the text. If information is missing, write: not specified.`,
 
-        'E9': `Create a clear list in Russian of the actions that must be completed based on this text.
-Determine what needs to be done, which documents must be prepared, who should be answered, where to apply, which deadlines must be observed and what needs attention.
-Divide the actions by priority: urgent, important, can be done later.
-If it is not clear from the text what exactly must be done, list the questions that need clarification.`,
+        'Q9': `Create a clear list of actions in English that need to be completed based on this text.
+Identify what must be done, which documents should be prepared, who should be answered, where to contact, which deadlines must be observed and what to pay attention to.
+Divide the actions by priority: urgent, important, can be done later.`,
 
-        'E10': `Create a polite official letter in German based on the provided text.
+        'Q10': `Create a polite official letter in German based on the provided text.
 The letter should be simple, clear and correct, at A2-B1 level.
 Preserve all important facts: names, dates, amounts, addresses, organization names, document numbers and circumstances.
-Letter structure: greeting, short explanation of the situation, main request or message, if necessary request for confirmation or clarification, closing.
-Add at the end: Mit freundlichen Grüßen`
+Structure: salutation, short explanation of the situation, main request or message, request for confirmation or clarification if needed, closing.
+End with: Mit freundlichen Grüßen`
     };
 
-    const EDITABLE_SELECTORS = [
-        'textarea',
-        'input[type="text"]',
-        'input[type="search"]',
-        '[contenteditable="true"]',
-        '[contenteditable="plaintext-only"]',
-        '[role="textbox"]'
-    ];
+    const EDITABLE_SELECTORS = ['textarea', 'input[type="text"]', 'input[type="search"]', '[contenteditable="true"]', '[contenteditable="plaintext-only"]', '[role="textbox"]'];
 
     function isEditableElement(element) {
         if (!element || !element.matches) return false;
         if (element.disabled || element.readOnly) return false;
-
         const tagName = element.tagName ? element.tagName.toLowerCase() : '';
         const inputType = (element.getAttribute('type') || '').toLowerCase();
-
-        if (tagName === 'input') {
-            const allowedInputTypes = ['text', 'search'];
-            if (!allowedInputTypes.includes(inputType)) return false;
-        }
-
+        if (tagName === 'input' && !['text', 'search'].includes(inputType)) return false;
         return EDITABLE_SELECTORS.some(selector => element.matches(selector));
     }
 
     function findEditableElement(target) {
         if (!target) return null;
         if (isEditableElement(target)) return target;
-
         if (target.closest) {
             const element = target.closest(EDITABLE_SELECTORS.join(','));
             if (isEditableElement(element)) return element;
         }
-
         return null;
     }
 
     function getText(element) {
-        if (!element) return '';
         const tagName = element.tagName ? element.tagName.toLowerCase() : '';
         if (tagName === 'textarea' || tagName === 'input') return element.value || '';
         return element.innerText || element.textContent || '';
     }
 
     function normalizeCommand(text) {
-        return text.trim().replace(/\s+/g, '').toUpperCase();
+        return String(text || '').trim().replace(/\s+/g, '').toUpperCase();
     }
 
     function setCursorToEnd(element) {
         element.focus();
         const tagName = element.tagName ? element.tagName.toLowerCase() : '';
-
         if (tagName === 'textarea' || tagName === 'input') {
             const length = element.value.length;
             element.setSelectionRange(length, length);
             return;
         }
-
         const range = document.createRange();
         const selection = window.getSelection();
         range.selectNodeContents(element);
@@ -148,31 +121,22 @@ Add at the end: Mit freundlichen Grüßen`
 
     function dispatchInputEvents(element, text) {
         try {
-            element.dispatchEvent(new InputEvent('input', {
-                bubbles: true,
-                cancelable: true,
-                inputType: 'insertReplacementText',
-                data: text
-            }));
+            element.dispatchEvent(new InputEvent('input', { bubbles: true, cancelable: true, inputType: 'insertReplacementText', data: text }));
         } catch (error) {
             element.dispatchEvent(new Event('input', { bubbles: true }));
         }
-
         element.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     function replaceText(element, newText) {
-        if (!element) return;
         const tagName = element.tagName ? element.tagName.toLowerCase() : '';
         element.focus();
-
         if (tagName === 'textarea' || tagName === 'input') {
             element.value = newText;
             setCursorToEnd(element);
             dispatchInputEvents(element, newText);
             return;
         }
-
         try {
             const range = document.createRange();
             const selection = window.getSelection();
@@ -183,7 +147,6 @@ Add at the end: Mit freundlichen Grüßen`
         } catch (error) {
             element.textContent = newText;
         }
-
         setCursorToEnd(element);
         dispatchInputEvents(element, newText);
     }
@@ -191,7 +154,6 @@ Add at the end: Mit freundlichen Grüßen`
     function showNotification(message) {
         const oldBox = document.getElementById('tampermonkey-universal-ai-prompt-commands-notification');
         if (oldBox) oldBox.remove();
-
         const box = document.createElement('div');
         box.id = 'tampermonkey-universal-ai-prompt-commands-notification';
         box.textContent = message;
@@ -206,8 +168,6 @@ Add at the end: Mit freundlichen Grüßen`
         box.style.fontSize = '14px';
         box.style.fontFamily = 'Arial, sans-serif';
         box.style.boxShadow = '0 4px 12px rgba(0,0,0,0.35)';
-        box.style.maxWidth = '420px';
-        box.style.lineHeight = '1.4';
         document.body.appendChild(box);
         setTimeout(() => box.remove(), 2200);
     }
@@ -215,14 +175,10 @@ Add at the end: Mit freundlichen Grüßen`
     function checkAndReplace(target) {
         const editable = findEditableElement(target);
         if (!editable) return;
-
-        const currentText = getText(editable);
-        const command = normalizeCommand(currentText);
-
+        const command = normalizeCommand(getText(editable));
         if (!Object.prototype.hasOwnProperty.call(COMMANDS, command)) return;
-
         replaceText(editable, COMMANDS[command]);
-        showNotification(`Command ${command} was replaced with a prepared prompt`);
+        showNotification(`Trigger ${command} replaced with a ready-made AI prompt`);
     }
 
     document.addEventListener('input', event => setTimeout(() => checkAndReplace(event.target), 20), true);
